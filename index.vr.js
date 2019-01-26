@@ -24,7 +24,9 @@ export default class FroggyVr extends React.Component {
       currentPos: 0,
       carsInitialIndex: [20, 10],
       houseInitialIndex: 40,
-      yIndex: 1
+      yIndex: 1,
+      adjustedX: 15,
+      score: 0
     };
   }
 
@@ -38,6 +40,7 @@ export default class FroggyVr extends React.Component {
       // console.log(' at 00000')
       if(this.state.currentPos === this.state.carsInitialIndex[0]) {
         console.log("you're hit")
+        this.setState({depth: new Animated.Value(0), currentPos: 0})
       }
     },1200)
     this.state.slideValue.setValue(0);
@@ -81,13 +84,19 @@ export default class FroggyVr extends React.Component {
     let newValue = this.state.depth._value + 5
     let newPos = this.state.currentPos + 5
 
-    if(this.state.currentPos === this.state.houseInitialIndex-15){
-      console.log('You won!')
-    }
 
     this.setState({
       currentPos: newPos
     })
+    if(this.state.currentPos === this.state.houseInitialIndex-15){
+      console.log('You won!')
+      let newScore = this.state.score + 1
+      console.log(newScore, 'new')
+
+      this.setState({depth: new Animated.Value(0), currentPos: 0, score: newScore})
+      console.log(this.state.score)
+    }
+
     Animated.spring(
       this.state.depth,
       {
@@ -110,13 +119,27 @@ export default class FroggyVr extends React.Component {
     return (
       <View >
         
-        <View style={{transform:[{translateZ:-10}]}}>
+        <View style={{transform:[{translateZ:-5}]}}>
           <VrButton onClick={this.getCloser}>
             <Text style={{color:"red"}}>{this.state.text}</Text>
-
           </VrButton>
         </View>
+
+
         <Pano source={asset('Space.jpg')} />
+
+        <Text
+            style={{
+              transform: [
+                {translate: [3, this.state.yIndex, -3]},
+                // { translateZ: this.state.depth },
+                {rotateY: -90}
+              ],
+              fontSize: 0.4
+            }}
+          >
+            SCOREBOARD : {this.state.score}
+          </Text>
        
        {/* APARTMENT MODELS  */}
         <AnimatedModel
