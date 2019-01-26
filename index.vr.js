@@ -58,6 +58,7 @@ export default class FroggyVr extends React.Component {
       // console.log(' at 00000')
       if(this.state.currentPos === this.state.carsInitialIndex[1]) {
         console.log("you're hit")
+        this.setState({depth: new Animated.Value(0), currentPos: 0})
       }
     },1800)
     this.state.slideValue2.setValue(0);
@@ -79,6 +80,10 @@ export default class FroggyVr extends React.Component {
     
     let newValue = this.state.depth._value + 5
     let newPos = this.state.currentPos + 5
+
+    if(this.state.currentPos === this.state.houseInitialIndex-15){
+      console.log('You won!')
+    }
 
     this.setState({
       currentPos: newPos
@@ -113,6 +118,7 @@ export default class FroggyVr extends React.Component {
         </View>
         <Pano source={asset('Space.jpg')} />
        
+       {/* APARTMENT MODELS  */}
         <AnimatedModel
           source={{
             obj: asset('apartments2.obj'),
@@ -148,7 +154,7 @@ export default class FroggyVr extends React.Component {
           wireframe={false}
         />
 
-                <AnimatedModel
+        <AnimatedModel
           source={{
             obj: asset('apartments2.obj'),
             // mtl: asset('apartments2.mtl'),
@@ -164,9 +170,9 @@ export default class FroggyVr extends React.Component {
           }}
           texture={asset('apartments2.002.png')}
           wireframe={false}
-
         />
 
+        {/* CAR MODELS */}
         <AnimatedModel
           source={{
             obj: asset('car.obj'),
