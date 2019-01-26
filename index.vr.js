@@ -12,6 +12,10 @@ import {
 
 import { Easing } from 'react-native';
 
+import Car from './containers/Car'
+import House from './containers/House'
+import City from './containers/City'
+
 export default class FroggyVr extends React.Component {
   constructor() {
     super();
@@ -38,11 +42,11 @@ export default class FroggyVr extends React.Component {
   car1Animation() {
     setTimeout(() => {
       // console.log(' at 00000')
-      if(this.state.currentPos === this.state.carsInitialIndex[0]) {
+      if (this.state.currentPos === this.state.carsInitialIndex[0]) {
         console.log("you're hit")
-        this.setState({depth: new Animated.Value(0), currentPos: 0})
+        this.setState({ depth: new Animated.Value(0), currentPos: 0 })
       }
-    },1200)
+    }, 1200)
     this.state.slideValue.setValue(0);
 
     //car
@@ -59,11 +63,11 @@ export default class FroggyVr extends React.Component {
   car2Animation() {
     setTimeout(() => {
       // console.log(' at 00000')
-      if(this.state.currentPos === this.state.carsInitialIndex[1]) {
+      if (this.state.currentPos === this.state.carsInitialIndex[1]) {
         console.log("you're hit")
-        this.setState({depth: new Animated.Value(0), currentPos: 0})
+        this.setState({ depth: new Animated.Value(0), currentPos: 0 })
       }
-    },1800)
+    }, 1800)
     this.state.slideValue2.setValue(0);
     Animated.timing(
       this.state.slideValue2,
@@ -75,12 +79,12 @@ export default class FroggyVr extends React.Component {
     ).start(() => {
       this.car2Animation()
     });
-    
+
   }
 
   getCloser = () => {
     //maniplate animation to make it seem that we moved forward
-    
+
     let newValue = this.state.depth._value + 5
     let newPos = this.state.currentPos + 5
 
@@ -88,12 +92,12 @@ export default class FroggyVr extends React.Component {
     this.setState({
       currentPos: newPos
     })
-    if(this.state.currentPos === this.state.houseInitialIndex-15){
+    if (this.state.currentPos === this.state.houseInitialIndex - 15) {
       console.log('You won!')
       let newScore = this.state.score + 1
       console.log(newScore, 'new')
 
-      this.setState({depth: new Animated.Value(0), currentPos: 0, score: newScore})
+      this.setState({ depth: new Animated.Value(0), currentPos: 0, score: newScore })
       console.log(this.state.score)
     }
 
@@ -108,7 +112,7 @@ export default class FroggyVr extends React.Component {
       }
     ).start();
   }
-  
+
   render() {
     const spin = this.state.spin.interpolate({
       inputRange: [0, 1],
@@ -118,10 +122,10 @@ export default class FroggyVr extends React.Component {
     var AnimatedModel = Animated.createAnimatedComponent(Model);
     return (
       <View >
-        
-        <View style={{transform:[{translateZ:-5}]}}>
+
+        <View style={{ transform: [{ translateZ: -5 }] }}>
           <VrButton onClick={this.getCloser}>
-            <Text style={{color:"red"}}>{this.state.text}</Text>
+            <Text style={{ color: "red" }}>{this.state.text}</Text>
           </VrButton>
         </View>
 
@@ -129,136 +133,71 @@ export default class FroggyVr extends React.Component {
         <Pano source={asset('Space.jpg')} />
 
         <Text
-            style={{
-              transform: [
-                {translate: [3, this.state.yIndex, -3]},
-                // { translateZ: this.state.depth },
-                {rotateY: -90}
-              ],
-              fontSize: 0.4
-            }}
-          >
-            SCOREBOARD : {this.state.score}
-          </Text>
-       
-       {/* APARTMENT MODELS  */}
-        <AnimatedModel
-          source={{
-            obj: asset('apartments2.obj'),
-          }}
           style={{
             transform: [
-              { translate: [0, -this.state.yIndex, -this.state.houseInitialIndex] },
-              { translateZ: this.state.depth },
-              { rotateY: 180 }
+              { translate: [3, this.state.yIndex, -3] },
+              // { translateZ: this.state.depth },
+              { rotateY: -90 }
             ],
-
+            fontSize: 0.4
           }}
-          texture={asset('apartments2.000.png')}
-          wireframe={false}
+        >
+          SCOREBOARD : {this.state.score}
+        </Text>
+
+        {/* APARTMENT MODELS  */}
+
+        <House
+          xIndex={-8}
+          yIndex={this.state.yIndex}
+          houseInitialIndex={this.state.houseInitialIndex}
+          depth={this.state.depth}
         />
 
-        <AnimatedModel
-          source={{
-            obj: asset('apartments2.obj'),
-          }}
-          style={{
-            transform: [
-              { translate: [8, -this.state.yIndex, -this.state.houseInitialIndex] },
-              { translateZ: this.state.depth },
-              { rotateY: 180 }
-            ],
-          }}
-          texture={asset('apartments2.001.png')}
-          wireframe={false}
+        <House
+          xIndex={0}
+          yIndex={this.state.yIndex}
+          houseInitialIndex={this.state.houseInitialIndex}
+          depth={this.state.depth}
         />
 
-        <AnimatedModel
-          source={{
-            obj: asset('apartments2.obj'),
-          }}
-          style={{
-            transform: [
-              { translate: [-8, -this.state.yIndex, -this.state.houseInitialIndex] },
-              { translateZ: this.state.depth },
-              { rotateY: 180 }
-            ],
-          }}
-          texture={asset('apartments2.002.png')}
-          wireframe={false}
+        <House
+          xIndex={8}
+          yIndex={this.state.yIndex}
+          houseInitialIndex={this.state.houseInitialIndex}
+          depth={this.state.depth}
         />
 
-          <AnimatedModel
-          source={{
-            obj: asset('The+City.obj'),
-          }}
-          style={{
-            transform: [
-              { translate: [-1500, -40, -1800] },
-              { translateZ: this.state.depth },
-              { rotateY: 180 }
-            ],
-
-          }}
-          texture={asset('cty1.jpg')}
-          texture={asset('cty2x.jpg')}
-          texture={asset('ang1.jpg')}
-
-          wireframe={false}
+        <City
+          xIndex={-1500}
+          yIndex={-40}
+          zIndex={-1800}
+          depth={this.state.depth}
+          rotateY={180}
         />
 
-        <AnimatedModel
-          source={{
-            obj: asset('The+City.obj'),
-          }}
-          style={{
-            transform: [
-              { translate: [1500, -40, -248] },
-              { translateZ: this.state.depth },
-              { rotateY: 0 }
-            ],
-
-          }}
-          texture={asset('cty1.jpg')}
-          texture={asset('cty2x.jpg')}
-          texture={asset('ang1.jpg')}
-
-          wireframe={false}
-
+       <City
+          xIndex={1500}
+          yIndex={-40}
+          zIndex={-248}
+          depth={this.state.depth}
+          rotateY={0}
         />
 
         {/* CAR MODELS */}
-        <AnimatedModel
-          source={{
-            obj: asset('Transport Shuttle_obj.obj'),
-            mtl: asset('Transport Shuttle_obj.mtl'),
-          }}
-          style={{
-            transform: [
-              { translate: [-30, -this.state.yIndex, -this.state.carsInitialIndex[0]] },
-              { translateZ: this.state.depth },
-              { translateX: this.state.slideValue },
-              { rotateY: 180 },
-            ],
-          }}
-          wireframe={false}
+
+        <Car
+          yIndex={this.state.yIndex}
+          carsInitialIndex={this.state.carsInitialIndex[0]}
+          depth={this.state.depth}
+          slideValue={this.state.slideValue}
         />
 
-        <AnimatedModel
-          source={{
-            obj: asset('Transport Shuttle_obj.obj'),
-            mtl: asset('Transport Shuttle_obj.mtl'),
-
-          }}
-          style={{
-            transform: [
-              { translate: [-30, -this.state.yIndex, -this.state.carsInitialIndex[1]] },
-              { translateZ: this.state.depth },
-              { translateX: this.state.slideValue2 },
-              { rotateY: 180 },
-            ],
-          }}
-          wireframe={false}
+        <Car
+          yIndex={this.state.yIndex}
+          carsInitialIndex={this.state.carsInitialIndex[1]}
+          depth={this.state.depth}
+          slideValue={this.state.slideValue2}
         />
 
       </View>
