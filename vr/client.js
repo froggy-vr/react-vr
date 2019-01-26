@@ -11,11 +11,15 @@ function init(bundle, parent, options) {
     ...options,
   });
   vr.render = function() {
+    
     // Any custom behavior you want to perform on each frame goes here
   };
+  
   // Begin the animation loop
   vr.start();
   return vr;
 }
+
+
 
 window.ReactVR = {init};
