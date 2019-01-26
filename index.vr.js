@@ -7,7 +7,7 @@ import {
   View,
   Model,
   Animated,
-  VrButton
+  VrButton,
 } from 'react-vr';
 
 import { Easing } from 'react-native';
@@ -84,7 +84,7 @@ export default class FroggyVr extends React.Component {
     let newValue = this.state.depth._value + 5
     let newPos = this.state.currentPos + 5
 
-
+    console.log('new position', newPos)
     this.setState({
       currentPos: newPos
     })
@@ -145,13 +145,11 @@ export default class FroggyVr extends React.Component {
         <AnimatedModel
           source={{
             obj: asset('apartments2.obj'),
-            // mtl: asset('apartments2.mtl'),
           }}
           style={{
             transform: [
               { translate: [0, -this.state.yIndex, -this.state.houseInitialIndex] },
               { translateZ: this.state.depth },
-              // {rotateY: spin}
               { rotateY: 180 }
             ],
 
@@ -163,13 +161,11 @@ export default class FroggyVr extends React.Component {
         <AnimatedModel
           source={{
             obj: asset('apartments2.obj'),
-            // mtl: asset('apartments2.mtl'),
           }}
           style={{
             transform: [
               { translate: [8, -this.state.yIndex, -this.state.houseInitialIndex] },
               { translateZ: this.state.depth },
-              // {rotateY: spin}
               { rotateY: 180 }
             ],
           }}
@@ -180,49 +176,86 @@ export default class FroggyVr extends React.Component {
         <AnimatedModel
           source={{
             obj: asset('apartments2.obj'),
-            // mtl: asset('apartments2.mtl'),
           }}
           style={{
             transform: [
               { translate: [-8, -this.state.yIndex, -this.state.houseInitialIndex] },
               { translateZ: this.state.depth },
-              // {rotateY: spin}
               { rotateY: 180 }
             ],
-
           }}
           texture={asset('apartments2.002.png')}
           wireframe={false}
         />
 
+          <AnimatedModel
+          source={{
+            obj: asset('The+City.obj'),
+          }}
+          style={{
+            transform: [
+              { translate: [-1500, -40, -1800] },
+              { translateZ: this.state.depth },
+              { rotateY: 180 }
+            ],
+
+          }}
+          texture={asset('cty1.jpg')}
+          texture={asset('cty2x.jpg')}
+          texture={asset('ang1.jpg')}
+
+          wireframe={false}
+        />
+
+        <AnimatedModel
+          source={{
+            obj: asset('The+City.obj'),
+          }}
+          style={{
+            transform: [
+              { translate: [1500, -40, -248] },
+              { translateZ: this.state.depth },
+              { rotateY: 0 }
+            ],
+
+          }}
+          texture={asset('cty1.jpg')}
+          texture={asset('cty2x.jpg')}
+          texture={asset('ang1.jpg')}
+
+          wireframe={false}
+
+        />
+
         {/* CAR MODELS */}
         <AnimatedModel
           source={{
-            obj: asset('car.obj'),
-            // mtl: asset('car.mtl'),
+            obj: asset('Transport Shuttle_obj.obj'),
+            mtl: asset('Transport Shuttle_obj.mtl'),
           }}
           style={{
             transform: [
               { translate: [-30, -this.state.yIndex, -this.state.carsInitialIndex[0]] },
               { translateZ: this.state.depth },
               { translateX: this.state.slideValue },
-              { rotateY: 100 },
+              { rotateY: 180 },
             ],
           }}
-          texture={asset('car.jpg')}
           wireframe={false}
         />
 
         <AnimatedModel
           source={{
-            obj: asset('car.obj'),
+            obj: asset('Transport Shuttle_obj.obj'),
+            mtl: asset('Transport Shuttle_obj.mtl'),
+
           }}
           style={{
             transform: [
               { translate: [-30, -this.state.yIndex, -this.state.carsInitialIndex[1]] },
               { translateZ: this.state.depth },
               { translateX: this.state.slideValue2 },
-              { rotateY: 100 },
+              { rotateY: 180 },
             ],
           }}
           wireframe={false}
