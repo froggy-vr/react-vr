@@ -11,6 +11,11 @@ import {
 } from 'react-vr';
 
 import { Easing } from 'react-native';
+import firebase from './config/firebase'
+
+// MASUKIN FIREBASE BUAT LISTEN KALAU TRUE AND BERUBAH JADI FALSE, JUMP
+
+firebase.ref(`${this.state.u}`)
 
 export default class FroggyVr extends React.Component {
   constructor() {
@@ -26,7 +31,9 @@ export default class FroggyVr extends React.Component {
       houseInitialIndex: 40,
       yIndex: 1,
       adjustedX: 15,
-      score: 0
+      score: 0,
+      userId: 'user123',
+      jumped: false,
     };
   }
 
@@ -75,38 +82,44 @@ export default class FroggyVr extends React.Component {
     ).start(() => {
       this.car2Animation()
     });
-    
   }
 
   getCloser = () => {
     //maniplate animation to make it seem that we moved forward
     
-    let newValue = this.state.depth._value + 5
-    let newPos = this.state.currentPos + 5
-
-    console.log('new position', newPos)
-    this.setState({
-      currentPos: newPos
-    })
-    if(this.state.currentPos === this.state.houseInitialIndex-15){
-      console.log('You won!')
-      let newScore = this.state.score + 1
-      console.log(newScore, 'new')
-
-      this.setState({depth: new Animated.Value(0), currentPos: 0, score: newScore})
-      console.log(this.state.score)
-    }
-
-    Animated.spring(
-      this.state.depth,
-      {
-        toValue: newValue,
-        duration: 500,
-        friction: 2, //default 7
-        tension: 5 //default 40
-        // easing: Easing.bezier(.17,.67,1,.47)
+    firebase.ref(`${this.state.userId}/jump`).on('value')
+    .then(function(snapshot){
+      if(this.state.jumped && !snapshot.val()){
+        let newValue = this.state.depth._value + 5
+        let newPos = this.state.currentPos + 5
+    
+        console.log('new position', newPos)
+        this.setState({
+          currentPos: newPos
+        })
+        if(this.state.currentPos === this.state.houseInitialIndex-15){
+          console.log('You won!')
+          let newScore = this.state.score + 1
+          console.log(newScore, 'new')
+    
+          this.setState({depth: new Animated.Value(0), currentPos: 0, score: newScore})
+          console.log(this.state.score)
+        }
+    
+        Animated.spring(
+          this.state.depth,
+          {
+            toValue: newValue,
+            duration: 500,
+            friction: 2, //default 7
+            tension: 5 //default 40
+            // easing: Easing.bezier(.17,.67,1,.47)
+          }
+        ).start();
       }
-    ).start();
+      this.setState({jumped: snapshot.val()})
+    })
+
   }
   
   render() {
