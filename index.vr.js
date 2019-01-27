@@ -17,7 +17,6 @@ import Car from './containers/Car'
 import House from './containers/House'
 import City from './containers/City'
 
-import firebase from './config'
 const database = firebase.database()
 
 export default class FroggyVr extends React.Component {
@@ -126,8 +125,6 @@ export default class FroggyVr extends React.Component {
         // easing: Easing.bezier(.17,.67,1,.47)
       }
     ).start();
-
-    this.setState({ jumped: snapshot.val() })
   }
 
   render() {
