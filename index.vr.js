@@ -13,13 +13,12 @@ import {
 import { Easing } from 'react-native';
 import firebase from './config/firebase'
 
-// MASUKIN FIREBASE BUAT LISTEN KALAU TRUE AND BERUBAH JADI FALSE, JUMP
-
-firebase.ref(`${this.state.u}`)
-
 import Car from './containers/Car'
 import House from './containers/House'
 import City from './containers/City'
+
+import firebase from './config'
+const database = firebase.database()
 
 export default class FroggyVr extends React.Component {
   constructor() {
@@ -44,6 +43,16 @@ export default class FroggyVr extends React.Component {
   componentDidMount() {
     this.car1Animation();
     this.car2Animation();
+    this.firebaseSubscribe()
+  }
+
+  firebaseSubscribe = () => {
+    database.ref(`/${this.state.userId}/jump`).on('value', snapshot => {
+      this.setState({ jumped: snapshot.val() })
+      if (snapshot.val()) {
+        this.getCloser()
+      }
+    })
   }
 
   car1Animation() {
@@ -91,39 +100,34 @@ export default class FroggyVr extends React.Component {
   getCloser = () => {
     //maniplate animation to make it seem that we moved forward
     
-    firebase.ref(`${this.state.userId}/jump`).on('value')
-    .then(function(snapshot){
-      if(this.state.jumped && !snapshot.val()){
-        let newValue = this.state.depth._value + 5
-        let newPos = this.state.currentPos + 5
-    
-        console.log('new position', newPos)
-        this.setState({
-          currentPos: newPos
-        })
-        if(this.state.currentPos === this.state.houseInitialIndex-15){
-          console.log('You won!')
-          let newScore = this.state.score + 1
-          console.log(newScore, 'new')
-    
-          this.setState({depth: new Animated.Value(0), currentPos: 0, score: newScore})
-          console.log(this.state.score)
-        }
-    
-        Animated.spring(
-          this.state.depth,
-          {
-            toValue: newValue,
-            duration: 500,
-            friction: 2, //default 7
-            tension: 5 //default 40
-            // easing: Easing.bezier(.17,.67,1,.47)
-          }
-        ).start();
-      }
-      this.setState({jumped: snapshot.val()})
-    })
+    let newValue = this.state.depth._value + 5
+    let newPos = this.state.currentPos + 5
 
+    console.log('new position', newPos)
+    this.setState({
+      currentPos: newPos
+    })
+    if (this.state.currentPos === this.state.houseInitialIndex - 15) {
+      console.log('You won!')
+      let newScore = this.state.score + 1
+      console.log(newScore, 'new')
+
+      this.setState({ depth: new Animated.Value(0), currentPos: 0, score: newScore })
+      console.log(this.state.score)
+    }
+
+    Animated.spring(
+      this.state.depth,
+      {
+        toValue: newValue,
+        duration: 500,
+        friction: 2, //default 7
+        tension: 5 //default 40
+        // easing: Easing.bezier(.17,.67,1,.47)
+      }
+    ).start();
+
+    this.setState({ jumped: snapshot.val() })
   }
 
   render() {
@@ -189,7 +193,7 @@ export default class FroggyVr extends React.Component {
           rotateY={180}
         />
 
-       <City
+        <City
           xIndex={1500}
           yIndex={-40}
           zIndex={-248}
