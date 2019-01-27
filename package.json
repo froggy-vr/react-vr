@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "firebase": "^5.8.1",
     "ovrui": "~1.2.0",
     "react": "~15.4.1",
     "react-native": "~0.42.0",
